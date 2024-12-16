@@ -56,7 +56,7 @@ def calc_cost(p, q):
     for i, j in indices:
         cost += p[i, j] * round(np.log(p[i, j] / q[i, j]), 3)
     
-    return cost
+    return round(cost, 3)
 
 cost = calc_cost(P, Q)
 print(f'{cost}\n')
@@ -64,7 +64,7 @@ print(f'{cost}\n')
 
 def calc_gradient(p, q, y):
     """
-    TODO: gradient_list 할당 수식 부분 디버깅
+    TODO: 함수 정리 필요
     """
     indices = [(0, 1), (0, 2), (1, 2)]
     gradient_list = []
@@ -84,8 +84,21 @@ def calc_gradient(p, q, y):
             (minus_list[i] * np.dot(vector_diff_list[i], weight_list[i])) +
             (minus_list[j] * np.dot(vector_diff_list[j], weight_list[j]))
         ))
+        print(f"4 * {minus_list[i]} * {vector_diff_list[i]} * {weight_list[i]} + {minus_list[j]} * {vector_diff_list[j]} * {weight_list[j]}")
 
     return [np.round(arr, 3) for arr in gradient_list]
 
 gradient = calc_gradient(P, Q, y)
 print(gradient)
+
+
+def data_step(y, gradient, learning_rate=0.1):
+    updated_y = []
+    for y_value, gradient_value in zip(y, gradient):
+        update_value = y_value - np.dot(learning_rate, gradient_value)
+        updated_y.append(update_value)
+
+    return updated_y
+
+updated_y = data_step(y, gradient)
+print(updated_y)
