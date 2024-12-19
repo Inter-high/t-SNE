@@ -22,31 +22,31 @@ This project applies t-SNE (t-Distributed Stochastic Neighbor Embedding) to visu
 6. **Calculate Gradient**  
     <img src="./figure/gradient_equation.jpg">
 
+# Environment
+
+This project is developed using the following setup:
+
+- Python Version: 3.10
+- Operating System: Ubuntu 22.04 (Jammy Jellyfish)
+- Containerization: Docker
+
 # Usage
 
 To execute the script, run the following command with the desired arguments:
 
 ```bash
-python tsne_train.py \
-    --save_dir "/path/to/save/directory" \
-    --sample_size 1000 \
-    --perplexity 30 \
-    --learning_rate 200.0 \
-    --max_iter 2000 \
-    --early_exaggeration 4
+python tsne_train.py
 ```
 
 # Config
 
 | Argument              | Type    | Default Value       | Description                                           |
 |-----------------------|---------|---------------------|-------------------------------------------------------|
-| `--save_dir`          | `str`   | `/workspace/t-SNE`  | Path to the directory where results will be saved.   |
-| `--sample_size`       | `int`   | `1000`              | Number of MNIST samples to retrieve.                |
-| `--perplexity`        | `int`   | `30`                | Perplexity parameter for t-SNE.                     |
-| `--learning_rate`     | `float` | `200.0`             | Learning rate for t-SNE optimization.               |
-| `--max_iter`          | `int`   | `2000`              | Maximum number of t-SNE iterations.                 |
-| `--early_exaggeration`| `int`   | `4`                 | Early exaggeration factor for t-SNE.                |
-
+| `sample_size`       | `int`   | `1000`              | Number of MNIST samples to retrieve.                |
+| `perplexity`        | `int`   | `30`                | Perplexity parameter for t-SNE.                     |
+| `learning_rate`     | `float` | `200.0`             | Learning rate for t-SNE optimization.               |
+| `max_iter`          | `int`   | `2000`              | Maximum number of t-SNE iterations.                 |
+| `early_exaggeration`| `int`   | `4`                 | Early exaggeration factor for t-SNE.                |
 
 # Result
 
