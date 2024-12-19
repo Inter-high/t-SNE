@@ -41,3 +41,30 @@ def get_mnist_sample(sample_size: int) -> Tuple[np.ndarray, np.ndarray]:
     x = x / 255.0
 
     return x, y
+
+
+def get_cifar10_sample(sample_size: int) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Fetch a sample of the CIFAR-10 dataset with the specified sample size using fetch_openml.
+
+    Parameters:
+        sample_size (int): The number of samples to retrieve from the dataset.
+
+    Returns:
+        Tuple[np.ndarray, np.ndarray]: A tuple containing the sampled features (x) and labels (y).
+            - x: A NumPy array of shape (sample_size, 3072), normalized to the range [0, 1].
+            - y: A NumPy array of shape (sample_size,) containing integer labels for the samples.
+    """
+    data = fetch_openml("CIFAR_10", version=1, as_frame=False)
+
+    x, y = data.data, data.target
+    x, y = shuffle(x, y, random_state=42)
+
+    y = y.astype(int)  # CIFAR-10의 레이블은 정수형으로 변환
+
+    x = x[:sample_size]
+    y = y[:sample_size]
+
+    x = x / 255.0  # 픽셀 값을 [0, 1]로 정규화
+
+    return x, y
