@@ -1,15 +1,4 @@
-"""
-This class provides an implementation of t-SNE (t-Distributed Stochastic Neighbor Embedding),
-a dimensionality reduction algorithm primarily used for visualizing high-dimensional data.
-
-It includes methods to calculate distance matrices, determine optimal sigmas based on
-perplexity, compute joint probability distributions (P and Q matrices), and perform
-gradient descent to optimize the embeddings.
-
-Author: yumemonzo@gmail.com
-Date: 2024-12-19
-"""
-
+import logging
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 
@@ -36,14 +25,14 @@ class TSNE:
         - Instantiate the class: `t_sne = TSNE()`.
         - Call the `train` method with high-dimensional data and hyperparameters:
           ```
-          y_tsne = t_sne.train(x, target_perplexity=30, learning_rate=200.0,
-                               max_iter=2000, early_exaggeration=4)
+          y_tsne, kl_divergences = t_sne.train(x, target_perplexity=30, learning_rate=200.0,
+                                               max_iter=2000, early_exaggeration=4)
           ```
           where `x` is a NumPy array of shape (n_samples, n_features).
     """
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, logger: logging.Logger) -> None:
+        self.logger = logger
 
     def calc_distance_matrix(self, arr: np.ndarray) -> np.ndarray:
         """
@@ -187,7 +176,7 @@ class TSNE:
         learning_rate: float,
         max_iter: int,
         early_exaggeration: int,
-    ) -> np.ndarray:
+    ) -> tuple[np.ndarray, list]:
         """
         Train the t-SNE model and return the low-dimensional embeddings.
 
@@ -199,7 +188,7 @@ class TSNE:
             early_exaggeration (int): Factor to exaggerate the P matrix early in training.
 
         Returns:
-            np.ndarray: Low-dimensional embeddings of shape (n_samples, 2).
+            tuple: Low-dimensional embeddings of shape (n_samples, 2) and a list of KL divergence values.
         """
         distance_matrix = self.calc_distance_matrix(x)
         sigmas = self.find_sigma(distance_matrix, target_perplexity)
@@ -215,6 +204,8 @@ class TSNE:
         momentum = np.zeros_like(y)  # Initialize momentum.
         alpha = 0.5  # Initial momentum value.
 
+        kl_divergences = []
+
         for iteration in range(max_iter):
             q_matrix = self.calc_q_matrix(y)
             gradient = self.calc_gradient(p_matrix, q_matrix, y)
@@ -225,7 +216,7 @@ class TSNE:
 
             if iteration == 250:
                 p_matrix /= early_exaggeration  # Stop early exaggeration
-                print("Early exaggeration ended.")
+                self.logger.info("Early exaggeration ended.")
 
             # Increase momentum dynamically
             if iteration >= 250:
@@ -233,6 +224,9 @@ class TSNE:
 
             if iteration % 100 == 0 or iteration == max_iter - 1:
                 kl_divergence = self.calc_kl_divergence(p_matrix, q_matrix)
-                print(f"Iteration {iteration}: KL Divergence = {kl_divergence:.4f}")
+                kl_divergences.append(kl_divergence)
+                self.logger.info(
+                    f"Iteration {iteration}: KL Divergence = {kl_divergence:.4f}"
+                )
 
-        return y
+        return y, kl_divergences
