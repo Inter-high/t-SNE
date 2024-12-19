@@ -1,0 +1,5 @@
+sample_size: 1000
+perplexity: 30
+learning_rate: 200.0
+max_iter: 2000
+early_exaggeration: 4
