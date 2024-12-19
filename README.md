@@ -60,8 +60,6 @@ This project applies t-SNE (t-Distributed Stochastic Neighbor Embedding) to visu
 
 Results are visualized with two plots:  
 1. KL Divergence over iterations to evaluate the optimization process. 
-<img src="./fig/kl_divergence.jpg"> 
+<img src="./figure/kl_divergence.jpg"> 
 2. The final 2D t-SNE visualization of the MNIST dataset with color-coded labels.  
-<img src="./fig/result.jpg"> 
-
-Result images will be attached here.
+<img src="./figure/result.jpg"> 
