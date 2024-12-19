@@ -10,54 +10,22 @@ Author: yumemonzo@gmail.com
 Date: 2024-12-19
 """
 
-import os
 import logging
 import numpy as np
 import matplotlib.pyplot as plt
-from datetime import datetime
 
 
-def get_logger(file_path: str) -> logging.Logger:
+def get_logger() -> logging.Logger:
     """
     Creates and returns a logger object for logging messages to both console and file.
-
-    Parameters:
-        file_path (str): Path to the directory where the log file will be saved.
 
     Returns:
         logging.Logger: Configured logger instance.
     """
     logger = logging.getLogger("tsne_train_logger")
     logger.setLevel(logging.DEBUG)
-    console_handler = logging.StreamHandler()
-    file_handler = logging.FileHandler(os.path.join(file_path, "train.log"))
-    formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
-    console_handler.setFormatter(formatter)
-    file_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
-    logger.addHandler(file_handler)
+
     return logger
-
-
-def create_folder_with_timestamp(base_path: str) -> str:
-    """
-    Creates a timestamped folder inside a base directory.
-
-    Parameters:
-        base_path (str): The base directory where the result folder will be created.
-
-    Returns:
-        str: Path to the created timestamped folder.
-    """
-    result_folder = os.path.join(base_path, "result")
-    os.makedirs(result_folder, exist_ok=True)
-    timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-    folder_name = os.path.join(result_folder, timestamp)
-    os.makedirs(folder_name, exist_ok=True)
-    print(f"Folder created: {folder_name}")
-    return folder_name
 
 
 def plot_kl_divergence(kl_divergences: list, file_path: str) -> None:
