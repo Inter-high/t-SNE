@@ -1,0 +1,14 @@
+[tool.black]
+line-length = 88
+skip-string-normalization = true
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 88  # 라인 길이 제한
+select = ["ANN", "C", "E", "F", "W"]  # 타입 주석과 주석 검사 활성화
+ignore = []  # 무시할 규칙 없음
+
+[tool.ruff.flake8-annotations]
+suppress-dummy-args = false
+suppress-none-returning = false
+allow-star-arg-any = false
