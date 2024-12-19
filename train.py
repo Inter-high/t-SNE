@@ -1,6 +1,6 @@
 import argparse
 from data import get_mnist_sample
-from t_sne import TSNE
+from tsne import TSNE
 
 
 def get_args():
