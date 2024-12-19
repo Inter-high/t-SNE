@@ -38,7 +38,7 @@ def main(cfg: DictConfig) -> None:
         cfg (DictConfig): Configuration object containing t-SNE hyperparameters and other settings.
     """
     file_path = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir
-    logger = get_logger(file_path)
+    logger = get_logger()
 
     x, y = get_mnist_sample(cfg.sample_size)
     tsne = TSNE(logger)
