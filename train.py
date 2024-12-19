@@ -11,9 +11,16 @@ Author: yumemonzo@gmail.com
 Date: 2024-12-19
 """
 
+import os
 import argparse
 from data import get_mnist_sample
 from tsne import TSNE
+from utils import (
+    get_logger,
+    create_folder_with_timestamp,
+    plot_tsne,
+    plot_kl_divergence,
+)
 
 
 def get_args() -> argparse.Namespace:
@@ -29,6 +36,9 @@ def get_args() -> argparse.Namespace:
             - early_exaggeration (int): Early exaggeration factor for t-SNE (default: 4).
     """
     parser = argparse.ArgumentParser(description="t-SNE Training for MNIST Dataset")
+    parser.add_argument(
+        "--save_dir", type=str, help="save directory path", default="/workspace/t-SNE"
+    )
     parser.add_argument(
         "--sample_size",
         type=int,
@@ -69,12 +79,18 @@ def main() -> None:
     """
     args = get_args()
 
-    x, y = get_mnist_sample(args.sample_size)
-    t_sne = TSNE()
+    file_path = create_folder_with_timestamp(args.save_dir)
+    logger = get_logger(file_path)
 
-    _ = t_sne.train(
+    x, y = get_mnist_sample(args.sample_size)
+    tsne = TSNE(logger)
+
+    tsne_y, kl_divergence = tsne.train(
         x, args.perplexity, args.learning_rate, args.max_iter, args.early_exaggeration
     )
+
+    plot_kl_divergence(kl_divergence, os.path.join(file_path, "kl_divergence.jpg"))
+    plot_tsne(tsne_y, y, os.path.join(file_path, "result.jpg"))
 
 
 if __name__ == "__main__":
